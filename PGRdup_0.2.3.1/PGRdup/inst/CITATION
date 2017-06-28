@@ -1,0 +1,27 @@
+citHeader("To cite the R package 'PGRdup' in publications use:")
+
+if(!exists("meta") || is.null(meta)) meta <- packageDescription("PGRdup")
+year <- sub(".*(2[[:digit:]]{3})-.*", "\\1", meta$Date)
+vers <- paste("R package version", meta$Version)
+
+citEntry(entry  = "Manual",
+         title  = "PGRdup: Discover Probable Duplicates in Plant Genetic Resources Collections",
+         
+         author = c(person(c("Aravind", "J"),
+                           email = "aravindj@nbpgr.ernet.in",
+                           role = c("aut", "cre")),
+                    person(c("Radhamani", "J"), 
+                           email = "radhamani@nbpgr.ernet.in", role = "aut"),
+                    person(c("Kalyani", "Srinivasan"),
+                           email = "kalyani@nbpgr.ernet.in", role = "aut"),
+                    person(c("Ananda", "Subhash", "B"),
+                           email = "anandasubhash@gmail.com", role = "aut"),
+                    person(given = c("Rishi", "Kumar"), "Tyagi",
+                           email = "rktyagi@nbpgr.ernet.in", role = "aut")),
+         year = year,
+         note = paste(vers),
+         
+         textVersion = paste(
+           "Aravind, J., J. Radhamani, Kalyani Srinivasan, B. Ananda Subhash, and R. K. Tyagi (",
+           year, ").  PGRdup: Discover Probable Duplicates in Plant Genetic Resources Collections. ",
+           vers, ".", sep=""))

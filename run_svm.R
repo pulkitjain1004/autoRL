@@ -31,8 +31,15 @@ summary(svmfit)
 yhat_test <- predict(svmfit, nc_run.test)
 table(test = yhat_test, true = nc_run.test$response)
 
-nc_run.test %>% filter(yhat_test != response) %>% View()
-nc_run.test[yhat_test != nc_run.test$response,]
+miss_indice <- nc_run.test %>% filter(yhat_test != response) %>% select(Indice)
+miss_indice <- unlist(miss_indice)
+
+miss_pos <- pos_pairs2 %>% filter(Indice %in% miss_indice)
+miss_pos <- cbind( true_resp = 1, miss_pos)
+miss_neg <- neg_pairs %>% filter(Indice %in% miss_indice)
+miss_neg <- cbind( true_resp = 0, miss_neg)
+
+write.csv(miss_pos, file = "./round2/Missclassified_pairs.csv")
 
 tc <- tune.control(cross = 5)
 

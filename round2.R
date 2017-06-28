@@ -48,7 +48,7 @@ feature_score <- function(entity1, entity2){
   for(i in 6:12){
     
     if(i==11){
-      if( abs(as.integer(entity1[i]) - as.integer(entity2[i])) <= 3 && 
+      if( abs(as.integer(entity1[i]) - as.integer(entity2[i])) <= 3 || 
           abs(as.integer(entity1[i]) - as.integer(entity2[i])) >= 5 ) {
         score = score + 1
       }
@@ -71,13 +71,13 @@ propmiss <- function(dataframe) lapply(dataframe,
 
 
 
-nc_voter_apr13 <- read.csv("C:/Users/Pulkit Jain/Desktop/Record Linkage/Data/HPRC/ncvoter15_apr13/ncvoter15_apr13.csv")
+nc_voter_apr13 <- read.csv("./Data/HPRC/ncvoter15_apr13/ncvoter15_apr13.csv")
 voter2_apr13 <- nc_voter_apr13[,c(3,10,11,12,14,15, seq(26,31) ) ]
 
 # propmiss(nc_voter_apr13)
 # write.csv(propmiss(nc_voter_apr13), file="miss_13.csv")
 
-nc_voter_mar17 <- read.csv("C:/Users/Pulkit Jain/Desktop/Record Linkage/Data/HPRC/ncvoter15_mar17/ncvoter15_mar17.csv")
+nc_voter_mar17 <- read.csv("./Data/HPRC/ncvoter15_mar17/ncvoter15_mar17.csv")
 voter2_mar17 <- nc_voter_mar17[,c(3,10,11,12,14,15, seq(26,31) ) ]
 
 # convert 2 to 5 to characters
@@ -214,6 +214,10 @@ pos_pairs <- inner_join(voter2_apr13, voter2_mar17, by="voter_reg_num")
 # 6548 pairs
 
 pos_pairs2 <- pos_pairs[complete.cases(pos_pairs),]
+pos_pairs2[,"voter_reg_num"] <- 1:nrow(pos_pairs2)
+colnames(pos_pairs2)[1] <- "Indice"
+
+write.csv(pos_pairs2, file="./round2/pos_pairs2.csv")
 
 feature_score(voter2_apr13[1,], voter2_mar17[1,])
 
@@ -350,7 +354,10 @@ for(i in 1:a){
       
 }
 
+neg_pairs <- neg_pairs[neg_pairs[,2] != "0",]
+neg_pairs <- cbind(matrix(0,nrow(neg_pairs),1), neg_pairs)
+colnames(neg_pairs)[1] <- "Indice"
+neg_pairs[,"Indice"] <- (nrow(pos_pairs2)+1):(nrow(pos_pairs2)+nrow(neg_pairs))
 
-
-write.csv(neg_pairs, file="neg_pairs_better.csv")
+write.csv(neg_pairs, file="./round2/neg_pairs2.csv")
  

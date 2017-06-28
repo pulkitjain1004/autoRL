@@ -93,8 +93,8 @@ dist_func <- function(entity1, entity2){
 
 
 # enter positive paris here
-pos_pairs2 <- pos_pairs[complete.cases(pos_pairs),]
-
+pos_pairs2 <- read.csv("./round2/pos_pairs2.csv")
+pos_pairs2 <- pos_pairs2[, 2:24]
 
 # convert these
 
@@ -153,8 +153,12 @@ phi_m <- dist_func(entity1[i,"middle_name"], entity2[j,"middle_name"])
 phi_addr <- stringdist(tolower(entity1[i,"res_street_address"]), 
                      tolower(entity2[j,"res_street_address"]))
 
-phi_age <- if( abs(as.integer(entity1[i,"birth_age"]) - as.integer(entity2[i, "birth_age"])) <= 3 && 
-              abs(as.integer(entity1[i, "birth_age"]) - as.integer(entity2[i, "birth_age"])) >= 5 ) 0 else 1
+phi_age <- if( abs(as.integer(entity1[i,"birth_age"]) 
+                   - as.integer(entity2[i, "birth_age"])
+                   ) <= 3 ||
+               abs(as.integer(entity1[i, "birth_age"])
+                   - as.integer(entity2[i, "birth_age"])
+                   ) >= 5 ) 0 else 1
 
 phi_res_city <- if( stringdist( tolower(entity1[i, "res_city_desc"]),
                           tolower(entity2[i, "res_city_desc"])) == 0) 1 else 0
@@ -190,13 +194,17 @@ data_round2[i, 2:21] <- c(phi_l, phi_f, phi_m, phi_addr, phi_age,
 
 
 # enter negative pairs here
-neg_pairs <- read.csv("C:/Users/Pulkit Jain/Desktop/Record Linkage/round2/neg_pairs_better.csv",
+neg_pairs <- read.csv("./round2/neg_pairs2.csv", 
                       stringsAsFactors=FALSE)
-neg_pairs <- neg_pairs[,3:24]
+neg_pairs <- neg_pairs[,2:24]
+
+
+
 
 neg_pairs <- data.frame(neg_pairs, stringsAsFactors=FALSE)
 
-colnames(neg_pairs) = c("last_name"
+colnames(neg_pairs) = c("Indice"
+                        , "last_name"
                         , "first_name"
                         , "middle_name"
                         , "res_street_address"
@@ -221,8 +229,8 @@ colnames(neg_pairs) = c("last_name"
 )
 
 
-neg_pairs1 <- neg_pairs[, c(1:11)]
-neg_pairs2 <- neg_pairs[, c(12:22)]
+neg_pairs1 <- neg_pairs[, c(2:12)]
+neg_pairs2 <- neg_pairs[, c(13:23)]
 
 
 
@@ -250,8 +258,12 @@ for(i in 1:nrow(neg_pairs1)){
   phi_addr <- stringdist(tolower(neg_pairs1[i,"res_street_address"]), 
                          tolower(neg_pairs2[j,"res_street_address"]))
   
-  phi_age <- if( abs(as.integer(neg_pairs1[i,"birth_age"]) - as.integer(neg_pairs2[i, "birth_age"])) <= 3 && 
-                 abs(as.integer(neg_pairs1[i, "birth_age"]) - as.integer(neg_pairs2[i, "birth_age"])) >= 5 ) 0 else 1
+  phi_age <- if( (abs(as.integer(neg_pairs1[i,"birth_age"]) - 
+                      as.integer(neg_pairs2[i, "birth_age"]) ) 
+                  <= 3 ) || 
+                 (abs(as.integer(neg_pairs1[i, "birth_age"]) - 
+                      as.integer(neg_pairs2[i, "birth_age"]) )
+                 >= 5 )) 0 else 1
   
   phi_res_city <- if( stringdist( tolower(neg_pairs1[i, "res_city_desc"]),
                                   tolower(neg_pairs2[i, "res_city_desc"])) == 0) 1 else 0
@@ -282,4 +294,7 @@ dim(data_round2)
 dim(data_round2_2)
 
 data_round2_final <- rbind(data_round2, data_round2_2)
-write.csv(data_round2_final, "feature_table.csv")
+data_round2_final <- cbind(matrix(0,nrow(data_round2_final),1), data_round2_final)
+colnames(data_round2_final)[1] <- "Indice"  
+data_round2_final[,"Indice"] <- seq(1:nrow(data_round2_final))
+write.csv(data_round2_final, "./round2/feature_table.csv")
