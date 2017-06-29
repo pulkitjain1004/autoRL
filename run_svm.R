@@ -89,6 +89,9 @@ low_prob_n <- cbind( true_resp = 0, low_prob_n)
 low_prob_pair <- rbind(low_prob_p, low_prob_n)
 low_prob_pair <- cbind(prob %>% filter(row.names(prob) %in% low_prob_indice)
                        , low_prob_pair)
+colnames(low_prob_pair)[1] <- "prob_1"
+colnames(low_prob_pair)[2] <- "prob_0"
+
 
 write.csv(low_prob_pair, file="./round2/low_prob_pair.csv")
 
