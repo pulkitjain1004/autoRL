@@ -6,8 +6,11 @@ library(tidyverse)
 
 # insert pos_pairs and neg pairs
 # fix column names for both pos pairs and neg pairs
-
-colnames(neg_pairs) = c("Indice"
+pos_pairs3 <- read.csv("./round3/pos_pairs3.csv", stringsAsFactors = F)
+pos_pairs3 <- pos_pairs3[,2: ncol(pos_pairs3)]
+neg_pairs3 <- read.csv("./round3/neg_pairs3.csv", stringsAsFactors = F)
+neg_pairs3 <- neg_pairs3[,2: ncol(neg_pairs3)]
+colnames(pos_pairs3) = c("indice"
                         , "last_name.x"
                         , "first_name.x"
                         , "middle_name.x"
@@ -34,12 +37,20 @@ colnames(neg_pairs) = c("Indice"
 
 
 # input feature table in data
-svm_data <- read.csv("./round2/feature_table.csv",
+svm_data <- read.csv("./round3/feature_table3.csv",
                      stringsAsFactors=FALSE)
-svm_data <- svm_data[,2:23]
+svm_data <- svm_data[,2:ncol(svm_data)]
 
 
 svm_data$response <- as.factor(svm_data$response)
+svm_data$phi_age <- as.factor(svm_data$phi_age)
+svm_data$phi_res_city <- as.factor(svm_data$phi_res_city)
+svm_data$phi_race <- as.factor(svm_data$phi_race)
+svm_data$phi_ethnic <- as.factor(svm_data$phi_ethnic)
+svm_data$phi_party <- as.factor(svm_data$phi_party)
+svm_data$phi_gender <- as.factor(svm_data$phi_gender)
+svm_data$phi_birth_st <- as.factor(svm_data$phi_birth_st)
+svm_data$phi_new <- as.factor(svm_data$phi_new)
 
 set.seed(1004)
 train <- sort(sample(nrow(svm_data), 0.8*nrow(svm_data)))
@@ -49,7 +60,11 @@ nc_run.train <- svm_data[train,]
 
 
 
-svmfit <- svm(response~.-Indice, data=nc_run.train, probability =T,
+svmfit <- svm(response~.-indice 
+              -phi_l_sp1_ed -phi_l_sp1_jw -phi_l_sp1_dm1
+              -phi_l_sp1_dm2 -phi_l_sp2_ed -phi_l_sp2_jw 
+              -phi_l_sp2_dm1 -phi_l_sp2_dm2 
+              , data=nc_run.train, probability =T,
               kernal = "radial", cost = 10, gamma=1)
 
 summary(svmfit)
@@ -57,13 +72,13 @@ summary(svmfit)
 yhat_test <- predict(svmfit, nc_run.test, probability= T)
 table(test = yhat_test, true = nc_run.test$response)
 
-miss_indice <- nc_run.test %>% filter(yhat_test != response) %>% select(Indice)
+miss_indice <- nc_run.test %>% filter(yhat_test != response) %>% select(indice)
 miss_indice <- unlist(miss_indice)
 miss_indice
 
-miss_pos <- pos_pairs2 %>% filter(Indice %in% miss_indice)
+miss_pos <- pos_pairs3 %>% filter(indice %in% miss_indice)
 miss_pos <- cbind( true_resp = 1, miss_pos)
-miss_neg <- neg_pairs %>% filter(Indice %in% miss_indice)
+miss_neg <- neg_pairs3 %>% filter(indice %in% miss_indice)
 miss_neg <- cbind( true_resp = 0, miss_neg)
 
 prob <- data.frame(attr(yhat_test, "probabilities"))
@@ -74,7 +89,7 @@ miss_pairs <- cbind(prob %>% filter(row.names(prob) %in% miss_indice),
 colnames(miss_pairs)[1] <- "prob_1"
 colnames(miss_pairs)[2] <- "prob_0"
 
-write.csv(miss_pairs, file = "./round2/Missclassified_pairs.csv")
+write.csv(miss_pairs, file = "./round3/Missclassified_pairs_2.csv")
 
 # sort according to probability
 sort_prob <- sort(apply(prob,1,max))
