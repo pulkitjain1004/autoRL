@@ -1,0 +1,14 @@
+update, response of negative pairs, which appear to be wrongly coded on the basis of results of round2.
+
+Indice no: 6488, 20456, 20806
+
+Build new feature to account for last name change for females and birth state jaro winkler for all.
+
+If gender.x == gender.y && first_name && age_range && birth_state
+	gender == f: feature = 0 if normalised dist < 0.5 else 1 (gives slightly better result)
+	feature: JW of State, think
+	gender ==f: JW of middle name
+	gender ==f, JW of last name and middle name
+
+Understand which feature may be important on the basis of random forest for round2	
+	
