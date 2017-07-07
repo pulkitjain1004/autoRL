@@ -10,7 +10,7 @@ pos_pairs3 <- read.csv("./round3/pos_pairs3.csv", stringsAsFactors = F)
 pos_pairs3 <- pos_pairs3[,2: ncol(pos_pairs3)]
 neg_pairs3 <- read.csv("./round3/neg_pairs3.csv", stringsAsFactors = F)
 neg_pairs3 <- neg_pairs3[,2: ncol(neg_pairs3)]
-colnames(pos_pairs3) = c("indice"
+colnames(neg_pairs3) = c("indice"
                         , "last_name.x"
                         , "first_name.x"
                         , "middle_name.x"
@@ -43,14 +43,16 @@ svm_data <- svm_data[,2:ncol(svm_data)]
 
 
 svm_data$response <- as.factor(svm_data$response)
-svm_data$phi_age <- as.factor(svm_data$phi_age)
-svm_data$phi_res_city <- as.factor(svm_data$phi_res_city)
-svm_data$phi_race <- as.factor(svm_data$phi_race)
-svm_data$phi_ethnic <- as.factor(svm_data$phi_ethnic)
-svm_data$phi_party <- as.factor(svm_data$phi_party)
-svm_data$phi_gender <- as.factor(svm_data$phi_gender)
-svm_data$phi_birth_st <- as.factor(svm_data$phi_birth_st)
-svm_data$phi_new <- as.factor(svm_data$phi_new)
+svm_data$age_f <- as.factor(svm_data$age_f)
+svm_data$res_city_f <- as.factor(svm_data$res_city_f)
+svm_data$race_f <- as.factor(svm_data$race_f)
+svm_data$ethnic_f <- as.factor(svm_data$ethnic_f)
+svm_data$party_f <- as.factor(svm_data$party_f)
+svm_data$gender_f <- as.factor(svm_data$gender_f)
+svm_data$birth_st_f <- as.factor(svm_data$birth_st_f)
+svm_data$l_new_f <- as.factor(svm_data$l_new_f)
+svm_data$rule_f <- as.factor(svm_data$rule_f)
+svm_data$f_rule_f <- as.factor(svm_data$f_rule_f)
 
 set.seed(1004)
 train <- sort(sample(nrow(svm_data), 0.8*nrow(svm_data)))
@@ -61,9 +63,9 @@ nc_run.train <- svm_data[train,]
 
 
 svmfit <- svm(response~.-indice 
-              -phi_l_sp1_ed -phi_l_sp1_jw -phi_l_sp1_dm1
-              -phi_l_sp1_dm2 -phi_l_sp2_ed -phi_l_sp2_jw 
-              -phi_l_sp2_dm1 -phi_l_sp2_dm2 
+              -l_sp1_ed_i -l_sp1_jw_r -l_sp1_dm1_i -l_sp1_dm2_i 
+              -l_sp2_ed_i -l_sp2_jw_r -l_sp2_dm1_i -l_sp2_dm2_i
+              -birth_st_sp_r -l_new_f - rule_f
               , data=nc_run.train, probability =T,
               kernal = "radial", cost = 10, gamma=1)
 
@@ -89,7 +91,8 @@ miss_pairs <- cbind(prob %>% filter(row.names(prob) %in% miss_indice),
 colnames(miss_pairs)[1] <- "prob_1"
 colnames(miss_pairs)[2] <- "prob_0"
 
-write.csv(miss_pairs, file = "./round3/Missclassified_pairs_2.csv")
+write.csv(miss_pairs, 
+          file = "./round3/Missclassified_pairs_4+rule_based_female.csv")
 
 # sort according to probability
 sort_prob <- sort(apply(prob,1,max))
