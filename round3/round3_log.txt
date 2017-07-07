@@ -11,4 +11,63 @@ If gender.x == gender.y && first_name && age_range && birth_state
 	gender ==f, JW of last name and middle name
 
 Understand which feature may be important on the basis of random forest for round2	
-	
+
+Confusion matrix: Features of round2 + last_name_similarity_factor	
+    true
+test    0    1
+   0 4652   16
+   1    6  780
+
+Confusion matrix: Features of round2 last_name_similarity_factor + birth_st_jw	
+    true
+test    0    1
+   0 4658   30
+   1    4  766
+
+Confusion matrix: Features of round2 + rule_based + birth_state_jw + last_name_similarity_factor	
+    true
+test    0    1
+   0 4658   29
+   1    4  767
+
+Confusion matrix: Features of round2 + rule_based + last_name_similarity_factor
+    true
+test    0    1
+   0 4656   18
+   1    6  778
+
+Confusion matrix: Features of round2 + rule_based
+   true
+test    0    1
+   0 4655   16
+   1    7  780
+
+
+
+Random forests confusion matrices:
+
+
+Round2 features:
+    true
+test    0    1
+   0 4652    8
+   1   10  788
+
+Rule based:
+    true
+test    0    1
+   0 4650   12
+   1   12  784
+* Birth state are wrongly coded!
+
+
+Female rule based:
+   true
+test    0    1
+   0 4651    7
+   1   11  789
+
+
+
+
+In general rule based is giveing better performance, both when using female exclusive or general.
