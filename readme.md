@@ -3,11 +3,13 @@
 This repository consist of my R scripts which I have developed while working with Texas A&M Engineering Experiment Station.
 
 Record linkage (RL) is the task of finding records in a data set that refer to the same entity across different data sources (e.g., data files, books, websites, and databases).
-My work is concentrated on linking same people in multiple databases.
+My work is concentrated on linking same people in multiple databases. At present, this work is about construction of different features which can be used to determine the similarity between two entities. Primarly, SVM and Random Forests algorithms are used and evaluation of models is done on NC state voter database.
 
-The codes is split in 4 major files.
-1) How to build positive/negative pairs
-2) Generating features for those pairs
-3) Running either svm or random forests
+The codes is split in following major steps:
+1) How to build positive/negative pairs from entire database.
+2) Generating features for those pairs.
+3) Running either svm or random forests for prediction.
 
 Note: At the end of each code, output is saved in a csv format. This file is read in the next code.
+
+Other than the code, relevant research papers, log of activities, NC State voter database and results are also present in sub-directories.
