@@ -11,7 +11,7 @@ The code is split in following major steps:
 2) Generating features for those pairs.
 3) Running either svm or random forests for prediction.
 
-For detailed description on how to build parameters/features and overview of the project please refer to the Record_Linkage.pptx file.
+For detailed description on how to build parameters/features and an overview of the project please refer to the Record_Linkage.pptx file.
 Other than the code, relevant research papers, log of activities, NC State voter database and results are also present in sub-directories.
 
 Note: At the end of each script, output is saved in a csv format. This csv file is read in the next script.
