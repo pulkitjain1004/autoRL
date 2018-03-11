@@ -1,5 +1,9 @@
 # Record Linkage
 
+• Using Predictive Analytics to create uniform big data by linking multiple datasets with Patient information.
+• Used R to establish performance parameters to link entities.
+• Combined Machine Learing algorithms with probabilistic and rule-based approaches to increase efficiency.
+
 This repository consist of my R scripts which I have developed while working with Texas A&M Engineering Experiment Station.
 
 Record linkage (RL) is the task of finding records in a data set that refer to the same entity across different data sources (e.g., data files, books, websites, and databases).
