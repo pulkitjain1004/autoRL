@@ -1,4 +1,4 @@
-# Record Linkage
+# Automating Record Linkage
 
 This repository consist of my R scripts which I have developed while working with Texas A&M Engineering Experiment Station.
 
